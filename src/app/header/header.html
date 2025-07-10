@@ -30,16 +30,23 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>Account</span>
+          <span>{{ isLoggedIn ? (currentUser?.displayName || 'Account') : 'Account' }}</span>
         </button>
         
-        <div class="dropdown-menu" [class.active]="isAccountMenuOpen">
+        <!-- Logged Out Menu -->
+        <div class="dropdown-menu" [class.active]="isAccountMenuOpen" *ngIf="!isLoggedIn">
+          <button (click)="navigateToLogin()" class="dropdown-item dropdown-button">Sign In</button>
+          <button (click)="navigateToSignup()" class="dropdown-item dropdown-button">Sign Up</button>
+        </div>
+
+        <!-- Logged In Menu -->
+        <div class="dropdown-menu" [class.active]="isAccountMenuOpen" *ngIf="isLoggedIn">
           <a href="#" class="dropdown-item">My Profile</a>
           <a href="#" class="dropdown-item">Order History</a>
           <a href="#" class="dropdown-item">Wishlist</a>
           <a href="#" class="dropdown-item">Settings</a>
           <hr class="dropdown-divider">
-          <a href="#" class="dropdown-item">Sign Out</a>
+          <button (click)="signOut()" class="dropdown-item dropdown-button">Sign Out</button>
         </div>
       </div>
 

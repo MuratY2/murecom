@@ -160,10 +160,23 @@
   text-decoration: none;
   transition: background-color 0.2s;
   font-family: inherit;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.875rem;
 }
 
 .dropdown-item:hover {
   background-color: #f3f4f6;
+}
+
+.dropdown-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .dropdown-divider {
