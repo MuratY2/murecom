@@ -28,6 +28,7 @@ export interface UserData {
   createdAt: any;
   lastLoginAt: any;
   loginMethod: 'email' | 'google';
+  userType: 'buyer' | 'seller' | 'admin';
 }
 
 @Injectable({
@@ -37,17 +38,31 @@ export class AuthService {
   private auth = getAuth(app);
   private firestore = getFirestore(app);
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private userDataSubject = new BehaviorSubject<UserData | null>(null);
+  
   public currentUser$ = this.currentUserSubject.asObservable();
+  public userData$ = this.userDataSubject.asObservable();
 
   constructor() {
     // Listen to auth state changes
-    onAuthStateChanged(this.auth, (user) => {
+    onAuthStateChanged(this.auth, async (user) => {
       this.currentUserSubject.next(user);
+      
+      if (user) {
+        // Fetch user data from Firestore
+        await this.loadUserData(user.uid);
+      } else {
+        this.userDataSubject.next(null);
+      }
     });
   }
 
   get currentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  get userData(): UserData | null {
+    return this.userDataSubject.value;
   }
 
   get isLoggedIn(): boolean {
@@ -127,10 +142,12 @@ export class AuthService {
       photoURL: user.photoURL || '',
       createdAt: serverTimestamp(),
       lastLoginAt: serverTimestamp(),
-      loginMethod: loginMethod
+      loginMethod: loginMethod,
+      userType: 'buyer' // Default user type
     };
 
     await setDoc(doc(this.firestore, 'users', user.uid), userData);
+    this.userDataSubject.next(userData);
   }
 
   private async updateLastLogin(uid: string): Promise<void> {
@@ -140,8 +157,22 @@ export class AuthService {
         { lastLoginAt: serverTimestamp() }, 
         { merge: true }
       );
+      
+      // Reload user data to get updated info
+      await this.loadUserData(uid);
     } catch (error) {
       console.error('Error updating last login:', error);
+    }
+  }
+
+  private async loadUserData(uid: string): Promise<void> {
+    try {
+      const userDoc = await getDoc(doc(this.firestore, 'users', uid));
+      if (userDoc.exists()) {
+        this.userDataSubject.next(userDoc.data() as UserData);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
     }
   }
 

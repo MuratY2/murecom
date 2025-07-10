@@ -43,6 +43,25 @@ export class HeaderComponent {
     return this.authService.currentUser;
   }
 
+  get userData() {
+    return this.authService.userData;
+  }
+
+  get userTypeButton(): { text: string, action: string } {
+    const userType = this.userData?.userType || 'buyer';
+    
+    switch (userType) {
+      case 'buyer':
+        return { text: 'Become a Seller', action: 'become-seller' };
+      case 'seller':
+        return { text: 'Upload Product', action: 'upload-product' };
+      case 'admin':
+        return { text: 'Admin Dashboard', action: 'admin-dashboard' };
+      default:
+        return { text: 'Become a Seller', action: 'become-seller' };
+    }
+  }
+
   toggleCart(): void {
     this.isCartOpen = !this.isCartOpen;
     this.isAccountMenuOpen = false;
@@ -74,6 +93,27 @@ export class HeaderComponent {
   navigateToSignup(): void {
     this.closeDropdowns();
     this.router.navigate(['/signup']);
+  }
+
+  navigateToProfile(): void {
+    this.closeDropdowns();
+    this.router.navigate(['/profile']);
+  }
+
+  handleUserTypeAction(): void {
+    const action = this.userTypeButton.action;
+    
+    switch (action) {
+      case 'become-seller':
+        this.router.navigate(['/become-seller']);
+        break;
+      case 'upload-product':
+        this.router.navigate(['/upload-product']);
+        break;
+      case 'admin-dashboard':
+        this.router.navigate(['/admin-dashboard']);
+        break;
+    }
   }
 
   async signOut(): Promise<void> {
