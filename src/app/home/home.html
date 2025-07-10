@@ -1,0 +1,119 @@
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Filters Sidebar -->
+  <aside class="filters-sidebar">
+    <div class="filter-section">
+      <h3>Categories</h3>
+      <select [(ngModel)]="selectedCategory" class="filter-select">
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <h3>Price Range</h3>
+      <select [(ngModel)]="selectedPriceRange" class="filter-select">
+        <option *ngFor="let range of priceRanges" [value]="range.id">
+          {{ range.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <h3>Features</h3>
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox"> Free Shipping
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox"> On Sale
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox"> High Rated
+        </label>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Products Grid -->
+  <section class="products-section">
+    <div class="products-header">
+      <h2>Products</h2>
+      <div class="results-info">
+        {{ filteredProducts.length }} products found
+      </div>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+        <div class="product-image-container">
+          <img [src]="product.image" [alt]="product.name" class="product-image">
+          <div class="product-badge" *ngIf="product.badge">{{ product.badge }}</div>
+        </div>
+        
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          
+          <div class="product-rating">
+            <div class="stars">
+              <span *ngFor="let star of generateStars(product.rating)" 
+                    [class]="star === '★' ? 'star filled' : 'star'">{{ star }}</span>
+            </div>
+            <span class="rating-text">({{ product.reviews }})</span>
+          </div>
+          
+          <div class="product-price">
+            <span class="current-price">${{ product.price.toFixed(2) }}</span>
+            <span class="original-price" *ngIf="product.originalPrice">
+              ${{ product.originalPrice.toFixed(2) }}
+            </span>
+          </div>
+          
+          <button class="add-to-cart-button" (click)="addToCart(product)">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>Customer Service</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-section">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Sustainability</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="#">Newsletter</a></li>
+        <li><a href="#">Social Media</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; 2024 MureCom. All rights reserved.</p>
+  </div>
+</footer>
