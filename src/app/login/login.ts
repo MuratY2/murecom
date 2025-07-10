@@ -15,6 +15,7 @@ export class LoginComponent {
   email = '';
   password = '';
   isLoading = false;
+  isGoogleLoading = false;
   errorMessage = '';
 
   constructor(
@@ -38,6 +39,20 @@ export class LoginComponent {
       this.errorMessage = error.message;
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    this.isGoogleLoading = true;
+    this.errorMessage = '';
+
+    try {
+      await this.authService.signInWithGoogle();
+      this.router.navigate(['/']);
+    } catch (error: any) {
+      this.errorMessage = error.message;
+    } finally {
+      this.isGoogleLoading = false;
     }
   }
 }
