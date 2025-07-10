@@ -13,7 +13,7 @@
   min-height: 100vh;
 }
 
-/* Header Styles */
+/* Header Styles - Updated for better spacing */
 .header {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
@@ -24,12 +24,19 @@
 }
 
 .header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 2rem;
+  width: 100%;
+  max-width: none; /* Remove max-width constraint */
+  margin: 0;
+  padding: 1rem 3rem; /* Increased horizontal padding */
   display: flex;
   align-items: center;
   gap: 2rem;
+  justify-content: space-between; /* Better distribution */
+}
+
+.logo {
+  flex-shrink: 0; /* Prevent logo from shrinking */
+  margin-right: 1rem;
 }
 
 .logo h1 {
@@ -40,8 +47,9 @@
 }
 
 .search-container {
-  flex: 1;
-  max-width: 500px;
+  flex: 1; /* Take up remaining space */
+  max-width: 600px; /* Increased max-width */
+  margin: 0 2rem; /* Add margins on both sides */
   position: relative;
 }
 
@@ -75,7 +83,9 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem; /* Increased gap between actions */
+  flex-shrink: 0; /* Prevent actions from shrinking */
+  margin-left: 1rem;
 }
 
 .account-menu, .cart-menu {
