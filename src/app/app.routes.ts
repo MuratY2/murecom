@@ -3,6 +3,8 @@ import { HomeComponent } from './home/home';
 import { LoginComponent } from './login/login';
 import { SignupComponent } from './signup/signup';
 import { ProfileComponent } from './profile/profile';
+import { UploadProductComponent } from './upload-product/upload-product';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -10,5 +12,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'upload-product', component: UploadProductComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: '**', redirectTo: '' }
 ];

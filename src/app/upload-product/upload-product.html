@@ -1,0 +1,184 @@
+<div class="upload-container">
+  <div class="upload-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span> Back to Home
+    </button>
+    <h1>Upload New Product</h1>
+    <p>Add a new product to your store</p>
+  </div>
+
+  <form class="upload-form" (ngSubmit)="onSubmit()" #productForm="ngForm">
+    <!-- Basic Information -->
+    <div class="form-section">
+      <h2>Basic Information</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="productName">Product Name *</label>
+          <input 
+            type="text" 
+            id="productName" 
+            [(ngModel)]="product.name" 
+            name="productName"
+            placeholder="Enter product name"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category *</label>
+          <select id="category" [(ngModel)]="product.category" name="category" required>
+            <option value="">Select a category</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input 
+            type="text" 
+            id="brand" 
+            [(ngModel)]="product.brand" 
+            name="brand"
+            placeholder="Enter brand name">
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price ($) *</label>
+          <input 
+            type="number" 
+            id="price" 
+            [(ngModel)]="product.price" 
+            name="price"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock Quantity *</label>
+          <input 
+            type="number" 
+            id="stock" 
+            [(ngModel)]="product.stock" 
+            name="stock"
+            placeholder="0"
+            min="0"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="description">Description *</label>
+        <textarea 
+          id="description" 
+          [(ngModel)]="product.description" 
+          name="description"
+          placeholder="Describe your product in detail..."
+          rows="4"
+          required></textarea>
+      </div>
+    </div>
+
+    <!-- Product Images -->
+    <div class="form-section">
+      <h2>Product Images</h2>
+      <div class="image-upload-area" 
+           [class.drag-over]="dragOver"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)">
+        <div class="upload-content">
+          <div class="upload-icon">📷</div>
+          <p>Drag and drop images here or</p>
+          <input type="file" id="imageUpload" multiple accept="image/*" (change)="onFileSelect($event)" hidden>
+          <label for="imageUpload" class="upload-button">Choose Files</label>
+        </div>
+      </div>
+
+      <div class="selected-files" *ngIf="selectedFiles.length > 0">
+        <h3>Selected Images ({{selectedFiles.length}})</h3>
+        <div class="file-list">
+          <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+            <span class="file-name">{{file.name}}</span>
+            <button type="button" class="remove-file" (click)="removeFile(i)">×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specifications -->
+    <div class="form-section">
+      <h2>Specifications</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="weight">Weight</label>
+          <input 
+            type="text" 
+            id="weight" 
+            [(ngModel)]="product.specifications.weight" 
+            name="weight"
+            placeholder="e.g., 1.5 kg">
+        </div>
+
+        <div class="form-group">
+          <label for="dimensions">Dimensions</label>
+          <input 
+            type="text" 
+            id="dimensions" 
+            [(ngModel)]="product.specifications.dimensions" 
+            name="dimensions"
+            placeholder="e.g., 30x20x10 cm">
+        </div>
+
+        <div class="form-group">
+          <label for="material">Material</label>
+          <input 
+            type="text" 
+            id="material" 
+            [(ngModel)]="product.specifications.material" 
+            name="material"
+            placeholder="e.g., Cotton, Plastic">
+        </div>
+
+        <div class="form-group">
+          <label for="color">Color</label>
+          <input 
+            type="text" 
+            id="color" 
+            [(ngModel)]="product.specifications.color" 
+            name="color"
+            placeholder="e.g., Blue, Red">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="form-section">
+      <h2>Tags</h2>
+      <div class="tags-input">
+        <input 
+          type="text" 
+          [(ngModel)]="currentTag" 
+          name="currentTag"
+          placeholder="Add tags to help customers find your product"
+          (keyup.enter)="addTag()">
+        <button type="button" class="add-tag-btn" (click)="addTag()">Add Tag</button>
+      </div>
+      
+      <div class="tags-list" *ngIf="product.tags.length > 0">
+        <span class="tag" *ngFor="let tag of product.tags; let i = index">
+          {{tag}}
+          <button type="button" class="remove-tag" (click)="removeTag(i)">×</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="goBack()">Cancel</button>
+      <button type="submit" class="btn-primary" [disabled]="!productForm.valid">
+        Upload Product
+      </button>
+    </div>
+  </form>
+</div>
