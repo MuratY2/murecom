@@ -23,36 +23,32 @@ export class HeaderComponent {
     private router: Router
   ) {}
 
+  /* ----- cart getters ----- */
   get cartItemCount(): number {
     return this.cartService.getCartItemCount();
   }
-
   get cartTotal(): number {
     return this.cartService.getCartTotal();
   }
-
   get cartItems() {
     return this.cartService.getCartItems();
   }
 
+  /* ----- auth getters ----- */
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
-
   get currentUser() {
     return this.authService.currentUser;
   }
-
   get userData() {
     return this.authService.userData;
   }
 
-  get userTypeButton(): { text: string, action: string } {
-    const userType = this.userData?.userType || 'buyer';
-    
-    switch (userType) {
-      case 'buyer':
-        return { text: 'Become a Seller', action: 'become-seller' };
+  /* ----- UI helpers ----- */
+  get userTypeButton(): { text: string; action: string } {
+    const type = this.userData?.userType || 'buyer';
+    switch (type) {
       case 'seller':
         return { text: 'Upload Product', action: 'upload-product' };
       case 'admin':
@@ -66,63 +62,54 @@ export class HeaderComponent {
     this.isCartOpen = !this.isCartOpen;
     this.isAccountMenuOpen = false;
   }
-
   toggleAccountMenu(): void {
     this.isAccountMenuOpen = !this.isAccountMenuOpen;
     this.isCartOpen = false;
   }
-
   closeDropdowns(): void {
     this.isCartOpen = false;
     this.isAccountMenuOpen = false;
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    this.cartService.updateQuantity(productId, quantity);
+  /* ----- cart actions ----- */
+  updateQuantity(id: number | string, q: number): void {
+    this.cartService.updateQuantity(id, q);
+  }
+  removeFromCart(id: number | string): void {
+    this.cartService.removeFromCart(id);
   }
 
-  removeFromCart(productId: number): void {
-    this.cartService.removeFromCart(productId);
-  }
-
-  navigateToLogin(): void {
+  /* ----- navigation ----- */
+  navigateToLogin() {
     this.closeDropdowns();
     this.router.navigate(['/login']);
   }
-
-  navigateToSignup(): void {
+  navigateToSignup() {
     this.closeDropdowns();
     this.router.navigate(['/signup']);
   }
-
-  navigateToProfile(): void {
+  navigateToProfile() {
     this.closeDropdowns();
     this.router.navigate(['/profile']);
   }
 
-  handleUserTypeAction(): void {
-    const action = this.userTypeButton.action;
-    
-    switch (action) {
-      case 'become-seller':
-        this.router.navigate(['/become-seller']);
-        break;
-      case 'upload-product':
-        this.router.navigate(['/upload-product']);
-        break;
-      case 'admin-dashboard':
-        this.router.navigate(['/admin-dashboard']);
-        break;
-    }
+  handleUserTypeAction() {
+    this.router.navigate(['/', this.userTypeButton.action]);
   }
 
-  async signOut(): Promise<void> {
+  async signOut() {
     try {
       await this.authService.signOut();
       this.closeDropdowns();
       this.router.navigate(['/']);
-    } catch (error) {
-      console.error('Sign out error:', error);
+    } catch (e) {
+      console.error('Sign out error:', e);
     }
+  }
+
+  /** new: route user to /checkout */
+  goToCheckout() {
+    this.closeDropdowns();
+    this.router.navigate(['/checkout']);
   }
 }

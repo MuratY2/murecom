@@ -7,14 +7,21 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-      <input 
-        type="text" 
-        placeholder="Search products..." 
+      <input
+        type="text"
+        placeholder="Search products..."
         [(ngModel)]="searchQuery"
         class="search-input"
-      >
+      />
       <button class="search-button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
@@ -24,10 +31,26 @@
     <!-- User Type Action Button -->
     <div class="user-type-action" *ngIf="isLoggedIn">
       <button class="user-type-button" (click)="handleUserTypeAction()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" *ngIf="userData?.userType === 'seller'"></path>
-          <path d="M3 3h18v18H3zM9 9h6v6H9z" *ngIf="userData?.userType === 'admin'"></path>
-          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" *ngIf="userData?.userType === 'buyer'"></path>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            *ngIf="userData?.userType === 'seller'"
+          ></path>
+          <path
+            d="M3 3h18v18H3zM9 9h6v6H9z"
+            *ngIf="userData?.userType === 'admin'"
+          ></path>
+          <path
+            d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M12.5 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"
+            *ngIf="userData?.userType === 'buyer'"
+          ></path>
         </svg>
         <span>{{ userTypeButton.text }}</span>
       </button>
@@ -38,61 +61,128 @@
       <!-- Account Menu -->
       <div class="account-menu" (click)="$event.stopPropagation()">
         <button class="account-button" (click)="toggleAccountMenu()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+            ></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span>{{ isLoggedIn ? (currentUser?.displayName || 'Account') : 'Account' }}</span>
+          <span
+            >{{ isLoggedIn ? (currentUser?.displayName || "Account") : "Account"
+            }}</span
+          >
         </button>
-        
+
         <!-- Logged Out Menu -->
-        <div class="dropdown-menu" [class.active]="isAccountMenuOpen" *ngIf="!isLoggedIn">
-          <button (click)="navigateToLogin()" class="dropdown-item dropdown-button">Login</button>
-          <button (click)="navigateToSignup()" class="dropdown-item dropdown-button">Sign Up</button>
+        <div
+          class="dropdown-menu"
+          [class.active]="isAccountMenuOpen"
+          *ngIf="!isLoggedIn"
+        >
+          <button
+            (click)="navigateToLogin()"
+            class="dropdown-item dropdown-button"
+          >
+            Login
+          </button>
+          <button
+            (click)="navigateToSignup()"
+            class="dropdown-item dropdown-button"
+          >
+            Sign Up
+          </button>
         </div>
 
         <!-- Logged In Menu -->
-        <div class="dropdown-menu" [class.active]="isAccountMenuOpen" *ngIf="isLoggedIn">
-          <button (click)="navigateToProfile()" class="dropdown-item dropdown-button">My Profile</button>
+        <div
+          class="dropdown-menu"
+          [class.active]="isAccountMenuOpen"
+          *ngIf="isLoggedIn"
+        >
+          <button
+            (click)="navigateToProfile()"
+            class="dropdown-item dropdown-button"
+          >
+            My Profile
+          </button>
           <a href="#" class="dropdown-item">Order History</a>
           <a href="#" class="dropdown-item">Wishlist</a>
           <a href="#" class="dropdown-item">Settings</a>
-          <hr class="dropdown-divider">
-          <button (click)="signOut()" class="dropdown-item dropdown-button">Sign Out</button>
+          <hr class="dropdown-divider" />
+          <button
+            (click)="signOut()"
+            class="dropdown-item dropdown-button"
+          >
+            Sign Out
+          </button>
         </div>
       </div>
 
       <!-- Cart -->
       <div class="cart-menu" (click)="$event.stopPropagation()">
         <button class="cart-button" (click)="toggleCart()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 5H3m4 8v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6"></path>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 5H3m4 8v6a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-6"
+            ></path>
           </svg>
           <span>Cart</span>
-          <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+          <span class="cart-badge" *ngIf="cartItemCount > 0">{{
+            cartItemCount
+          }}</span>
         </button>
 
         <div class="cart-dropdown" [class.active]="isCartOpen">
           <div class="cart-header">
             <h3>Shopping Cart</h3>
           </div>
-          
+
           <div class="cart-items" *ngIf="cartItems.length > 0; else emptyCart">
             <div class="cart-item" *ngFor="let item of cartItems">
-              <img [src]="item.product.image" [alt]="item.product.name" class="cart-item-image">
+              <img
+                [src]="item.product.image"
+                [alt]="item.product.name"
+                class="cart-item-image"
+              />
               <div class="cart-item-details">
                 <h4>{{ item.product.name }}</h4>
                 <div class="cart-item-controls">
-                  <input 
-                    type="number" 
-                    [value]="item.quantity" 
-                    (change)="updateQuantity(item.product.id, +$any($event.target).value)"
+                  <input
+                    type="number"
+                    [value]="item.quantity"
+                    (change)="
+                      updateQuantity(
+                        item.product.id,
+                        +$any($event.target).value
+                      )
+                    "
                     min="1"
                     class="quantity-input"
+                  />
+                  <button
+                    (click)="removeFromCart(item.product.id)"
+                    class="remove-button"
                   >
-                  <button (click)="removeFromCart(item.product.id)" class="remove-button">Remove</button>
+                    Remove
+                  </button>
                 </div>
-                <div class="cart-item-price">${{ (item.product.price * item.quantity).toFixed(2) }}</div>
+                <div class="cart-item-price">
+                  ${{ (item.product.price * item.quantity).toFixed(2) }}
+                </div>
               </div>
             </div>
           </div>
@@ -107,7 +197,9 @@
             <div class="cart-total">
               <strong>Total: ${{ cartTotal.toFixed(2) }}</strong>
             </div>
-            <button class="checkout-button">Proceed to Checkout</button>
+            <button class="checkout-button" (click)="goToCheckout()">
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       </div>
