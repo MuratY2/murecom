@@ -140,9 +140,21 @@
     <!-- Form Actions -->
     <div class="form-actions">
       <button type="button" class="btn-secondary" (click)="goBack()">Cancel</button>
-      <button type="submit" class="btn-primary" [disabled]="!productForm.valid">
-        Upload Product
+      <button type="submit" class="btn-primary" [disabled]="!productForm.valid || uploading">
+        {{ uploading ? 'Uploading...' : 'Upload Product' }}
       </button>
+    </div>
+
+    <!-- Upload Status Messages -->
+    <div class="upload-status" *ngIf="uploading">
+      <div class="loading-spinner"></div>
+      <p>Uploading product...</p>
+    </div>
+    <div class="upload-status success" *ngIf="uploadSuccess">
+      <p>✅ Product uploaded successfully!</p>
+    </div>
+    <div class="upload-status error" *ngIf="uploadError">
+      <p>❌ {{ uploadError }}</p>
     </div>
   </form>
 </div>
