@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile/profile';
 import { UploadProductComponent } from './upload-product/upload-product';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ProductManagementComponent } from './product-management/product-management';
+import { CheckoutComponent } from './checkout/checkout';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'upload-product', component: UploadProductComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'admin/products', component: ProductManagementComponent },
+  { path: 'checkout', component: CheckoutComponent  },
   { path: '**', redirectTo: '' }
 ];
