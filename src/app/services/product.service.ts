@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
-import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { app } from '../firebase'; // Assuming firebase.ts is in the parent directory
-import { AuthService } from './auth.service'; // Assuming auth.service.ts is in the same directory
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc
+} from 'firebase/firestore';
+import { app } from '../firebase';
+import { AuthService } from './auth.service';
 
 export interface Product {
-  id?: string; // Firestore auto-generates this
+  id?: string;                     // Firestore auto-generates this
   name: string;
   description: string;
   price: number;
@@ -12,31 +22,33 @@ export interface Product {
   brand: string;
   stock: number;
   imageUrl: string;
-  status: 'pending' | 'approved' | 'rejected'; // Default to 'pending'
+  status: 'pending' | 'approved' | 'rejected';
   sellerId: string;
-  createdAt: any; // Firebase Timestamp
-  updatedAt: any; // Firebase Timestamp
+  createdAt: any;                  // Firebase Timestamp
+  updatedAt: any;                  // Firebase Timestamp
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProductService {
   private firestore = getFirestore(app);
   private productsCollection = collection(this.firestore, 'products');
 
   constructor(private authService: AuthService) {}
 
-  async addProduct(productData: Omit<Product, 'id' | 'status' | 'sellerId' | 'createdAt' | 'updatedAt'>): Promise<void> {
+  async addProduct(
+    productData: Omit<
+      Product,
+      'id' | 'status' | 'sellerId' | 'createdAt' | 'updatedAt'
+    >
+  ): Promise<void> {
     const currentUser = this.authService.currentUser;
-
     if (!currentUser) {
       throw new Error('User not logged in. Cannot upload product.');
     }
 
     const newProduct: Omit<Product, 'id'> = {
       ...productData,
-      status: 'pending', // Default status as requested
+      status: 'pending',
       sellerId: currentUser.uid,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
@@ -44,21 +56,34 @@ export class ProductService {
 
     try {
       await addDoc(this.productsCollection, newProduct);
-      console.log('Product added successfully to Firestore!');
     } catch (error) {
       console.error('Error adding product:', error);
-      throw new Error('Failed to upload product. Please try again.');
+      throw new Error('Failed to upload product.');
     }
   }
 
-  // New method to get pending products
+  /** Returns every product regardless of status */
+  async getAllProducts(): Promise<Product[]> {
+    try {
+      const snapshot = await getDocs(this.productsCollection);
+      const products: Product[] = [];
+      snapshot.forEach((d) => {
+        products.push({ id: d.id, ...d.data() } as Product);
+      });
+      return products;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      throw new Error('Failed to load products.');
+    }
+  }
+
   async getPendingProducts(): Promise<Product[]> {
     try {
       const q = query(this.productsCollection, where('status', '==', 'pending'));
-      const querySnapshot = await getDocs(q);
+      const snapshot = await getDocs(q);
       const products: Product[] = [];
-      querySnapshot.forEach((doc) => {
-        products.push({ id: doc.id, ...doc.data() } as Product);
+      snapshot.forEach((d) => {
+        products.push({ id: d.id, ...d.data() } as Product);
       });
       return products;
     } catch (error) {
@@ -67,15 +92,16 @@ export class ProductService {
     }
   }
 
-  // New method to update product status
-  async updateProductStatus(productId: string, newStatus: 'approved' | 'rejected'): Promise<void> {
+  async updateProductStatus(
+    productId: string,
+    newStatus: 'approved' | 'rejected'
+  ): Promise<void> {
     try {
       const productRef = doc(this.firestore, 'products', productId);
       await updateDoc(productRef, {
         status: newStatus,
         updatedAt: serverTimestamp()
       });
-      console.log(`Product ${productId} status updated to ${newStatus}`);
     } catch (error) {
       console.error(`Error updating product ${productId} status:`, error);
       throw new Error(`Failed to update product status to ${newStatus}.`);

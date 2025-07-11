@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CartService, Product } from '../services/cart.service';
+import { CartService, Product as CartProduct } from '../services/cart.service';
+import { ProductService, Product as FirestoreProduct } from '../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import { CartService, Product } from '../services/cart.service';
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   searchQuery = '';
   selectedCategory = 'all';
   selectedPriceRange = 'all';
@@ -32,93 +33,66 @@ export class HomeComponent {
     { id: '200+', name: '$200+' }
   ];
 
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Premium Wireless Headphones',
-      price: 199.99,
-      originalPrice: 249.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'electronics',
-      rating: 4.8,
-      reviews: 1247,
-      badge: 'Best Seller'
-    },
-    {
-      id: 2,
-      name: 'Smart Fitness Watch',
-      price: 299.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'electronics',
-      rating: 4.6,
-      reviews: 892,
-      badge: 'New'
-    },
-    {
-      id: 3,
-      name: 'Organic Cotton T-Shirt',
-      price: 29.99,
-      originalPrice: 39.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'clothing',
-      rating: 4.4,
-      reviews: 324
-    },
-    {
-      id: 4,
-      name: 'Professional Camera Lens',
-      price: 599.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'electronics',
-      rating: 4.9,
-      reviews: 156,
-      badge: 'Pro Choice'
-    },
-    {
-      id: 5,
-      name: 'Minimalist Desk Lamp',
-      price: 89.99,
-      originalPrice: 119.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'home',
-      rating: 4.5,
-      reviews: 678
-    },
-    {
-      id: 6,
-      name: 'Running Shoes',
-      price: 129.99,
-      image: '/placeholder.svg?height=300&width=300',
-      category: 'sports',
-      rating: 4.7,
-      reviews: 2341,
-      badge: 'Popular'
+  products: CartProduct[] = [];
+
+  constructor(
+    private cartService: CartService,
+    private productService: ProductService
+  ) {}
+
+  /** Fetches every product from Firestore and adapts it to the existing card interface */
+  async ngOnInit(): Promise<void> {
+    try {
+      const firestoreProducts: FirestoreProduct[] = await this.productService.getAllProducts();
+
+      // Map Firestore data to the Product interface used in the cards
+      this.products = firestoreProducts.map((p) => ({
+        id: p.id as number | string,              // Cart service accepts number, keep as string OK
+        name: p.name,
+        price: p.price,
+        originalPrice: undefined,                 // not stored yet
+        image: p.imageUrl,
+        category: p.category.toLowerCase(),
+        rating: 4.0,                              // placeholder
+        reviews: 324,                             // placeholder
+        badge: undefined                          // none for now
+      })) as CartProduct[];
+    } catch (error) {
+      console.error(error);
+      this.products = [];
     }
-  ];
+  }
 
-  constructor(private cartService: CartService) {}
-
-  get filteredProducts(): Product[] {
-    return this.products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
-      const matchesCategory = this.selectedCategory === 'all' || product.category === this.selectedCategory;
+  /** ----- Existing logic below stays unchanged ----- */
+  get filteredProducts(): CartProduct[] {
+    return this.products.filter((product) => {
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(this.searchQuery.toLowerCase());
+      const matchesCategory =
+        this.selectedCategory === 'all' ||
+        product.category === this.selectedCategory;
       const matchesPrice = this.matchesPriceRange(product.price);
-      
       return matchesSearch && matchesCategory && matchesPrice;
     });
   }
 
   matchesPriceRange(price: number): boolean {
     switch (this.selectedPriceRange) {
-      case '0-50': return price < 50;
-      case '50-100': return price >= 50 && price < 100;
-      case '100-200': return price >= 100 && price < 200;
-      case '200+': return price >= 200;
-      default: return true;
+      case '0-50':
+        return price < 50;
+      case '50-100':
+        return price >= 50 && price < 100;
+      case '100-200':
+        return price >= 100 && price < 200;
+      case '200+':
+        return price >= 200;
+      default:
+        return true;
     }
   }
 
-  addToCart(product: Product): void {
+  addToCart(product: CartProduct): void {
     this.cartService.addToCart(product);
   }
 
@@ -126,19 +100,11 @@ export class HomeComponent {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    
-    for (let i = 0; i < fullStars; i++) {
-      stars.push('★');
-    }
-    
-    if (hasHalfStar) {
-      stars.push('☆');
-    }
-    
-    while (stars.length < 5) {
-      stars.push('☆');
-    }
-    
+
+    for (let i = 0; i < fullStars; i++) stars.push('★');
+    if (hasHalfStar) stars.push('☆');
+    while (stars.length < 5) stars.push('☆');
+
     return stars;
   }
 }
