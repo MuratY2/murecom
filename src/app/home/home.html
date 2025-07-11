@@ -23,15 +23,9 @@
     <div class="filter-section">
       <h3>Features</h3>
       <div class="checkbox-group">
-        <label class="checkbox-label">
-          <input type="checkbox"> Free Shipping
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> On Sale
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> High Rated
-        </label>
+        <label class="checkbox-label"><input type="checkbox"> Free Shipping</label>
+        <label class="checkbox-label"><input type="checkbox"> On Sale</label>
+        <label class="checkbox-label"><input type="checkbox"> High Rated</label>
       </div>
     </div>
   </aside>
@@ -40,36 +34,34 @@
   <section class="products-section">
     <div class="products-header">
       <h2>Products</h2>
-      <div class="results-info">
-        {{ filteredProducts.length }} products found
-      </div>
+      <div class="results-info">{{ filteredProducts.length }} products found</div>
     </div>
 
     <div class="products-grid">
       <div class="product-card" *ngFor="let product of filteredProducts">
         <div class="product-image-container">
-          <img [src]="product.image" [alt]="product.name" class="product-image">
+          <img [src]="product.image" [alt]="product.name" class="product-image" />
           <div class="product-badge" *ngIf="product.badge">{{ product.badge }}</div>
         </div>
-        
+
         <div class="product-info">
           <h3 class="product-name">{{ product.name }}</h3>
-          
+
           <div class="product-rating">
             <div class="stars">
-              <span *ngFor="let star of generateStars(product.rating)" 
-                    [class]="star === '★' ? 'star filled' : 'star'">{{ star }}</span>
+              <span
+                *ngFor="let star of generateStars(product.rating)"
+                [class]="star === '★' ? 'star filled' : 'star'"
+                >{{ star }}</span
+              >
             </div>
             <span class="rating-text">({{ product.reviews }})</span>
           </div>
-          
+
           <div class="product-price">
             <span class="current-price">${{ product.price.toFixed(2) }}</span>
-            <span class="original-price" *ngIf="product.originalPrice">
-              ${{ product.originalPrice.toFixed(2) }}
-            </span>
           </div>
-          
+
           <button class="add-to-cart-button" (click)="addToCart(product)">
             Add to Cart
           </button>
@@ -91,7 +83,7 @@
         <li><a href="#">Returns</a></li>
       </ul>
     </div>
-    
+
     <div class="footer-section">
       <h4>About</h4>
       <ul>
@@ -101,7 +93,7 @@
         <li><a href="#">Sustainability</a></li>
       </ul>
     </div>
-    
+
     <div class="footer-section">
       <h4>Connect</h4>
       <ul>
@@ -112,7 +104,7 @@
       </ul>
     </div>
   </div>
-  
+
   <div class="footer-bottom">
     <p>&copy; 2024 MureCom. All rights reserved.</p>
   </div>

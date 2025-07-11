@@ -40,40 +40,32 @@ export class HomeComponent implements OnInit {
     private productService: ProductService
   ) {}
 
-  /** Fetches every product from Firestore and adapts it to the existing card interface */
+  /** Pull everything from Firestore, no undefined fields */
   async ngOnInit(): Promise<void> {
     try {
-      const firestoreProducts: FirestoreProduct[] = await this.productService.getAllProducts();
-
-      // Map Firestore data to the Product interface used in the cards
-      this.products = firestoreProducts.map((p) => ({
-        id: p.id as number | string,              // Cart service accepts number, keep as string OK
+      const raw: FirestoreProduct[] = await this.productService.getAllProducts();
+      this.products = raw.map((p) => ({
+        id: p.id as string | number,
         name: p.name,
         price: p.price,
-        originalPrice: undefined,                 // not stored yet
         image: p.imageUrl,
         category: p.category.toLowerCase(),
-        rating: 4.0,                              // placeholder
-        reviews: 324,                             // placeholder
-        badge: undefined                          // none for now
+        rating: 4,         // placeholder
+        reviews: 324       // placeholder
       })) as CartProduct[];
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       this.products = [];
     }
   }
 
-  /** ----- Existing logic below stays unchanged ----- */
+  /* ---------- view helpers ---------- */
   get filteredProducts(): CartProduct[] {
-    return this.products.filter((product) => {
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(this.searchQuery.toLowerCase());
-      const matchesCategory =
-        this.selectedCategory === 'all' ||
-        product.category === this.selectedCategory;
-      const matchesPrice = this.matchesPriceRange(product.price);
-      return matchesSearch && matchesCategory && matchesPrice;
+    return this.products.filter((p) => {
+      const s = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      const c =
+        this.selectedCategory === 'all' || p.category === this.selectedCategory;
+      return s && c && this.matchesPriceRange(p.price);
     });
   }
 
@@ -92,19 +84,13 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  addToCart(product: CartProduct): void {
-    this.cartService.addToCart(product);
+  addToCart(p: CartProduct): void {
+    this.cartService.addToCart(p);
   }
 
-  generateStars(rating: number): string[] {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 0; i < fullStars; i++) stars.push('★');
-    if (hasHalfStar) stars.push('☆');
-    while (stars.length < 5) stars.push('☆');
-
-    return stars;
+  generateStars(r: number): string[] {
+    const out: string[] = [];
+    for (let i = 1; i <= 5; i++) out.push(i <= Math.floor(r) ? '★' : '☆');
+    return out;
   }
 }
