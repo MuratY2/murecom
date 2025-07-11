@@ -5,6 +5,7 @@ import { SignupComponent } from './signup/signup';
 import { ProfileComponent } from './profile/profile';
 import { UploadProductComponent } from './upload-product/upload-product';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
+import { ProductManagementComponent } from './product-management/product-management';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'upload-product', component: UploadProductComponent },
   { path: 'admin-dashboard', component: AdminDashboardComponent },
+  { path: 'admin/products', component: ProductManagementComponent },
   { path: '**', redirectTo: '' }
 ];

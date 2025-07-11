@@ -1,0 +1,49 @@
+<div class="product-management-container">
+  <div class="management-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span> Back to Dashboard
+    </button>
+    <h1>Product Management</h1>
+    <p>Review and manage pending product uploads.</p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading pending products...</p>
+  </div>
+
+  <div class="error-state" *ngIf="error">
+    <div class="error-icon">⚠️</div>
+    <p>{{ error }}</p>
+    <button class="retry-button" (click)="loadPendingProducts()">Retry</button>
+  </div>
+
+  <div class="no-products-state" *ngIf="!loading && !error && pendingProducts.length === 0">
+    <div class="no-products-icon">🎉</div>
+    <p>No pending products to review!</p>
+    <small>All products have been approved or rejected.</small>
+  </div>
+
+  <div class="products-list" *ngIf="!loading && !error && pendingProducts.length > 0">
+    <div class="product-card" *ngFor="let product of pendingProducts">
+      <div class="product-image-wrapper">
+        <img [src]="product.imageUrl" [alt]="product.name" class="product-image" onerror="this.onerror=null;this.src='/placeholder.svg?height=100&width=100';">
+      </div>
+      <div class="product-details">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-category">{{ product.category }}</p>
+        <p class="product-price">${{ product.price | number:'1.2-2' }}</p>
+        <p class="product-description">{{ product.description }}</p>
+        <div class="product-meta">
+          <span>Brand: {{ product.brand || 'N/A' }}</span>
+          <span>Stock: {{ product.stock }}</span>
+          <span>Seller ID: {{ product.sellerId }}</span>
+        </div>
+      </div>
+      <div class="product-actions">
+        <button class="action-button approve-button" (click)="approveProduct(product.id!)">Approve</button>
+        <button class="action-button reject-button" (click)="rejectProduct(product.id!)">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
