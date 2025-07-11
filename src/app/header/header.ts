@@ -72,7 +72,7 @@ export class HeaderComponent {
     return this.authService.userData;
   }
 
-  /* user type button text/action */
+  /* user-type button text + action */
   get userTypeButton(): { text: string; action: string } {
     const t = this.userData?.userType || 'buyer';
     if (t === 'seller') return { text: 'Upload Product', action: 'upload-product' };
@@ -107,9 +107,27 @@ export class HeaderComponent {
     this.closeDropdowns();
     this.router.navigate(['/profile']);
   }
+
+  /* ---------- user-type button handler ---------- */
   handleUserTypeAction() {
-    this.router.navigate(['/', this.userTypeButton.action]);
+    const action = this.userTypeButton.action;
+
+    switch (action) {
+      case 'become-seller':
+        this.router.navigate(['/become-seller']);
+        break;
+      case 'upload-product':
+        this.router.navigate(['/upload-product']);
+        break;
+      case 'admin-dashboard':
+        this.router.navigate(['/admin-dashboard']);
+        break;
+      default:
+        this.router.navigate(['/']);
+    }
   }
+
+  /* ---------- sign-out ---------- */
   async signOut() {
     try {
       await this.authService.signOut();

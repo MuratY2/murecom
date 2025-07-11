@@ -1,14 +1,14 @@
-import { Component } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { Router } from "@angular/router"
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Router } from "@angular/router";
 
 interface AdminAction {
-  title: string
-  description: string
-  icon: string
-  route: string
-  color: string
-  count?: number
+  title: string;
+  description: string;
+  icon: string;
+  route: string;
+  color: string;
+  count?: number;
 }
 
 @Component({
@@ -16,17 +16,18 @@ interface AdminAction {
   standalone: true,
   imports: [CommonModule],
   templateUrl: "./admin-dashboard.html",
-  styleUrls: ["./admin-dashboard.css"],
+  styleUrls: ["./admin-dashboard.css"]
 })
 export class AdminDashboardComponent {
+  /* Tiles to show on the dashboard */
   adminActions: AdminAction[] = [
     {
       title: "Approve Products",
       description: "Review and approve pending product submissions from sellers",
       icon: "📦",
-      route: "/admin/approve-products",
+      route: "/admin/products",     // ← updated path
       color: "blue",
-      count: 12, // Demo count - can be replaced with real data later
+      count: 12
     },
     {
       title: "Manage Products",
@@ -34,7 +35,7 @@ export class AdminDashboardComponent {
       icon: "🛍️",
       route: "/admin/manage-products",
       color: "green",
-      count: 247,
+      count: 247
     },
     {
       title: "Approve Seller Requests",
@@ -42,7 +43,7 @@ export class AdminDashboardComponent {
       icon: "👤",
       route: "/admin/approve-sellers",
       color: "purple",
-      count: 8,
+      count: 8
     },
     {
       title: "Manage Users",
@@ -50,7 +51,7 @@ export class AdminDashboardComponent {
       icon: "👥",
       route: "/admin/manage-users",
       color: "orange",
-      count: 1834,
+      count: 1834
     },
     {
       title: "Order Management",
@@ -58,26 +59,26 @@ export class AdminDashboardComponent {
       icon: "📋",
       route: "/admin/manage-orders",
       color: "teal",
-      count: 156,
+      count: 156
     },
     {
       title: "System Settings",
       description: "Configure platform settings and administrative preferences",
       icon: "⚙️",
       route: "/admin/settings",
-      color: "gray",
-    },
-  ]
+      color: "gray"
+    }
+  ];
 
   constructor(private router: Router) {}
 
+  /* Navigate to the selected admin tool */
   navigateToAction(route: string): void {
-    console.log(`Navigating to: ${route}`)
-    // For now, just log - you can implement actual routing later
-    // this.router.navigate([route]);
+    this.router.navigate([route]);
   }
 
+  /* Back to main site */
   goBack(): void {
-    this.router.navigate(["/"])
+    this.router.navigate(["/"]);
   }
 }

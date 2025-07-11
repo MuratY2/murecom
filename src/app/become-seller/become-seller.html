@@ -1,0 +1,77 @@
+<div class="seller-form-container">
+  <div class="form-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span> Back to Home
+    </button>
+    <div class="header-content">
+      <h1>Become a Seller</h1>
+      <p>Join our marketplace and start selling your products today!</p>
+    </div>
+  </div>
+
+  <form class="seller-application-form" (ngSubmit)="onSubmit()" #sellerForm="ngForm">
+    <!-- Personal Information -->
+    <div class="form-section">
+      <h2>Personal Information</h2>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="fullName">Full Legal Name *</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            [(ngModel)]="sellerApplication.fullName" 
+            name="fullName" 
+            placeholder="As per your legal documents" 
+            required>
+        </div>
+        <div class="form-group full-width">
+          <label for="socialSecurityNumber">Social Security Number (SSN) *</label>
+          <input 
+            type="text" 
+            id="socialSecurityNumber" 
+            [(ngModel)]="sellerApplication.socialSecurityNumber" 
+            name="socialSecurityNumber" 
+            placeholder="XXX-XX-XXXX" 
+            required>
+          <small class="input-help">For identity verification and tax purposes.</small>
+        </div>
+        <div class="form-group full-width">
+          <label for="phoneNumber">Phone Number *</label>
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            [(ngModel)]="sellerApplication.phoneNumber" 
+            name="phoneNumber" 
+            placeholder="(123) 456-7890" 
+            required>
+        </div>
+      </div>
+    </div>
+
+    <!-- Business Information -->
+    <div class="form-section">
+      <h2>Business Information</h2>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="businessName">Business Name *</label>
+          <input 
+            type="text" 
+            id="businessName" 
+            [(ngModel)]="sellerApplication.businessName" 
+            name="businessName" 
+            placeholder="Your registered business name" 
+            required>
+        </div>
+        <!-- You can add more business-related fields here later if needed -->
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="goBack()">Cancel</button>
+      <button type="submit" class="btn-primary" [disabled]="!sellerForm.valid">
+        Submit Application
+      </button>
+    </div>
+  </form>
+</div>

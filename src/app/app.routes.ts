@@ -7,6 +7,7 @@ import { UploadProductComponent } from './upload-product/upload-product';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { ProductManagementComponent } from './product-management/product-management';
 import { CheckoutComponent } from './checkout/checkout';
+import { BecomeSellerComponent } from './become-seller/become-seller';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboardComponent },
   { path: 'admin/products', component: ProductManagementComponent },
   { path: 'checkout', component: CheckoutComponent  },
+  { path: 'become-seller', component: BecomeSellerComponent },
   { path: '**', redirectTo: '' }
 ];
