@@ -1,0 +1,108 @@
+<div class="seller-approval-container">
+  <div class="approval-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span> Back to Admin Dashboard
+    </button>
+    <div class="header-content">
+      <h1>Seller Applications</h1>
+      <p>Review and manage pending seller applications for your marketplace.</p>
+    </div>
+    <!-- Clear Resolved Button -->
+    <button
+      class="refresh-button"
+      style="margin-top:1rem"
+      *ngIf="hasResolved && !loading"
+      (click)="clearResolvedApplications()"
+    >
+      Clear Resolved
+    </button>
+  </div>
+
+  <div class="approval-content">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading seller applications...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-container" *ngIf="error && !loading">
+      <div class="error-message">
+        <p>{{ error }}</p>
+        <button class="retry-button" (click)="loadSellerApplications()">
+          Try Again
+        </button>
+      </div>
+    </div>
+
+    <!-- Seller Applications Grid -->
+    <div
+      class="applications-grid"
+      *ngIf="!loading && !error && sellerApplications.length > 0"
+    >
+      <div
+        class="application-card"
+        *ngFor="let app of sellerApplications"
+        [class.card-status-pending]="app.status === 'pending'"
+        [class.card-status-approved]="app.status === 'approved'"
+        [class.card-status-rejected]="app.status === 'rejected'"
+      >
+        <div class="card-header">
+          <h3 class="business-name">{{ app.businessName }}</h3>
+          <span class="status-badge" [class]="'badge-' + app.status">
+            {{ app.status | titlecase }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="detail-label">Full Name:</span>
+            <span class="detail-value">{{ app.fullName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Phone:</span>
+            <span class="detail-value">{{ app.phoneNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">SSN:</span>
+            <span class="detail-value">{{ app.socialSecurityNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Submitted:</span>
+            <span class="detail-value">{{ app.submittedAt | date: "medium" }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">User ID:</span>
+            <span class="detail-value user-id">{{ app.userId }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions" *ngIf="app.status === 'pending'">
+          <button class="btn-action btn-approve" (click)="approveSeller(app)">
+            Approve
+          </button>
+          <button class="btn-action btn-reject" (click)="rejectSeller(app)">
+            Reject
+          </button>
+        </div>
+
+        <div class="card-actions" *ngIf="app.status !== 'pending'">
+          <span class="action-message">
+            Application {{ app.status }}.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      class="empty-state"
+      *ngIf="!loading && !error && sellerApplications.length === 0"
+    >
+      <p>No seller applications to review at the moment.</p>
+      <button class="refresh-button" (click)="loadSellerApplications()">
+        Refresh List
+      </button>
+    </div>
+  </div>
+</div>

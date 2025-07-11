@@ -1,0 +1,354 @@
+/* General Page Layout */
+.seller-approval-container {
+  min-height: 100vh;
+  background-color: #f8fafc; /* Light gray background */
+  padding: 2rem;
+}
+
+.approval-header {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #6b7280; /* Gray text */
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: #2563eb; /* MureCom blue on hover */
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a; /* Dark text */
+  margin-bottom: 0.5rem;
+}
+
+.header-content p {
+  color: #6b7280; /* Gray text */
+  font-size: 1.125rem;
+}
+
+.approval-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #2563eb; /* MureCom blue spinner */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.error-container {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.error-message {
+  text-align: center;
+  color: #ef4444; /* Red for errors */
+}
+
+.error-message p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.retry-button {
+  background: #ef4444; /* Red button */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background: #dc2626; /* Darker red on hover */
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6b7280; /* Gray text */
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.refresh-button {
+  background: #2563eb; /* MureCom blue button */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.refresh-button:hover {
+  background: #1d4ed8; /* Darker blue on hover */
+}
+
+/* Applications Grid */
+.applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Application Card */
+.application-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb; /* Default light gray border */
+  display: flex;
+  flex-direction: column;
+  position: relative; /* For the status line */
+}
+
+.application-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+}
+
+/* Status-based top border for subtle indication */
+.application-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px; /* Thin line at the top */
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.card-status-pending::before {
+  background-color: #f59e0b; /* Subtle orange for pending */
+}
+.card-status-approved::before {
+  background-color: #10b981; /* Subtle green for approved */
+}
+.card-status-rejected::before {
+  background-color: #ef4444; /* Subtle red for rejected */
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f3f4f6; /* Light separator */
+}
+
+.business-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a; /* Dark text */
+  margin: 0;
+}
+
+/* Status Badge - More refined look */
+.status-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  /* Default text color, background set by specific status classes */
+}
+
+.badge-pending {
+  background-color: #fef3c7; /* Light yellow/orange background */
+  color: #d97706; /* Darker orange text */
+}
+.badge-approved {
+  background-color: #d1fae5; /* Light green background */
+  color: #065f46; /* Darker green text */
+}
+.badge-rejected {
+  background-color: #fee2e2; /* Light red background */
+  color: #991b1b; /* Darker red text */
+}
+
+.card-body {
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #374151; /* Darker gray for labels */
+  width: 100px; /* Fixed width for labels for alignment */
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: #4b5563; /* Slightly lighter gray for values */
+  flex-grow: 1;
+}
+
+.user-id {
+  font-family: monospace; /* Monospace for IDs */
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6; /* Light separator */
+}
+
+/* Action Buttons */
+.btn-action {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.btn-approve {
+  background: #10b981; /* Green for approve */
+  color: white;
+}
+
+.btn-approve:hover {
+  background: #059669; /* Darker green on hover */
+}
+
+.btn-reject {
+  background: #ef4444; /* Red for reject */
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #dc2626; /* Darker red on hover */
+}
+
+.action-message {
+  font-size: 0.9rem;
+  color: #6b7280; /* Gray text */
+  font-style: italic;
+  flex-grow: 1;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .seller-approval-container {
+    padding: 1rem;
+  }
+
+  .approval-header {
+    margin-bottom: 2rem;
+  }
+
+  .header-content h1 {
+    font-size: 2rem;
+  }
+
+  .header-content p {
+    font-size: 1rem;
+  }
+
+  .applications-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .application-card {
+    padding: 1rem;
+  }
+
+  .business-name {
+    font-size: 1.1rem;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .detail-label {
+    width: auto;
+    margin-bottom: 0.25rem;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-action {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .application-card {
+    padding: 0.75rem;
+  }
+}

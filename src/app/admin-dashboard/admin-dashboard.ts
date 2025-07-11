@@ -41,7 +41,7 @@ export class AdminDashboardComponent {
       title: "Approve Seller Requests",
       description: "Review applications from buyers who want to become sellers",
       icon: "👤",
-      route: "/admin/approve-sellers",
+      route: "/seller-approval",
       color: "purple",
       count: 8
     },
