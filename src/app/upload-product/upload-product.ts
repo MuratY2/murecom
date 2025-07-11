@@ -18,14 +18,7 @@ export class UploadProductComponent {
     category: '',
     brand: '',
     stock: 0,
-    images: [] as string[],
-    specifications: {
-      weight: '',
-      dimensions: '',
-      material: '',
-      color: ''
-    },
-    tags: [] as string[]
+    imageUrl: ''
   };
 
   categories = [
@@ -39,53 +32,36 @@ export class UploadProductComponent {
     'Automotive'
   ];
 
-  selectedFiles: File[] = [];
-  dragOver = false;
-  currentTag = '';
+  showImagePreview = false;
+  imagePreviewError = false;
 
   constructor(private router: Router) {}
 
-  onFileSelect(event: any) {
-    const files = Array.from(event.target.files) as File[];
-    this.selectedFiles = [...this.selectedFiles, ...files];
-  }
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    this.dragOver = true;
-  }
-
-  onDragLeave(event: DragEvent) {
-    event.preventDefault();
-    this.dragOver = false;
-  }
-
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    this.dragOver = false;
-    const files = Array.from(event.dataTransfer?.files || []) as File[];
-    this.selectedFiles = [...this.selectedFiles, ...files];
-  }
-
-  removeFile(index: number) {
-    this.selectedFiles.splice(index, 1);
-  }
-
-  addTag() {
-    if (this.currentTag.trim() && !this.product.tags.includes(this.currentTag.trim())) {
-      this.product.tags.push(this.currentTag.trim());
-      this.currentTag = '';
+  previewImage() {
+    if (this.product.imageUrl.trim()) {
+      this.showImagePreview = true;
+      this.imagePreviewError = false;
     }
   }
 
-  removeTag(index: number) {
-    this.product.tags.splice(index, 1);
+  onImageError() {
+    this.imagePreviewError = true;
+  }
+
+  onImageLoad() {
+    this.imagePreviewError = false;
+  }
+
+  closePreview() {
+    this.showImagePreview = false;
+    this.imagePreviewError = false;
   }
 
   onSubmit() {
     console.log('Product to upload:', this.product);
-    console.log('Selected files:', this.selectedFiles);
-    // Here you would typically upload the product to your backend
+    // Here you would typically upload the product to Firebase
+    // Example Firebase integration point:
+    // this.firebaseService.addProduct(this.product)
     alert('Product uploaded successfully! (Demo)');
   }
 

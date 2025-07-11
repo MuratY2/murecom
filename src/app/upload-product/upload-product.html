@@ -10,7 +10,7 @@
   <form class="upload-form" (ngSubmit)="onSubmit()" #productForm="ngForm">
     <!-- Basic Information -->
     <div class="form-section">
-      <h2>Basic Information</h2>
+      <h2>Product Information</h2>
       <div class="form-grid">
         <div class="form-group">
           <label for="productName">Product Name *</label>
@@ -79,97 +79,61 @@
       </div>
     </div>
 
-    <!-- Product Images -->
+    <!-- Product Image -->
     <div class="form-section">
-      <h2>Product Images</h2>
-      <div class="image-upload-area" 
-           [class.drag-over]="dragOver"
-           (dragover)="onDragOver($event)"
-           (dragleave)="onDragLeave($event)"
-           (drop)="onDrop($event)">
-        <div class="upload-content">
-          <div class="upload-icon">📷</div>
-          <p>Drag and drop images here or</p>
-          <input type="file" id="imageUpload" multiple accept="image/*" (change)="onFileSelect($event)" hidden>
-          <label for="imageUpload" class="upload-button">Choose Files</label>
+      <h2>Product Image</h2>
+      <div class="image-input-group">
+        <div class="form-group">
+          <label for="imageUrl">Image URL *</label>
+          <input 
+            type="url" 
+            id="imageUrl" 
+            [(ngModel)]="product.imageUrl" 
+            name="imageUrl"
+            placeholder="https://example.com/image.jpg"
+            required>
+          <small class="input-help">Enter a direct link to your product image</small>
         </div>
+        
+        <button 
+          type="button" 
+          class="preview-button" 
+          (click)="previewImage()"
+          [disabled]="!product.imageUrl.trim()">
+          Preview Image
+        </button>
       </div>
 
-      <div class="selected-files" *ngIf="selectedFiles.length > 0">
-        <h3>Selected Images ({{selectedFiles.length}})</h3>
-        <div class="file-list">
-          <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
-            <span class="file-name">{{file.name}}</span>
-            <button type="button" class="remove-file" (click)="removeFile(i)">×</button>
+      <!-- Image Preview Modal -->
+      <div class="preview-modal" *ngIf="showImagePreview" (click)="closePreview()">
+        <div class="preview-content" (click)="$event.stopPropagation()">
+          <div class="preview-header">
+            <h3>Image Preview</h3>
+            <button type="button" class="close-button" (click)="closePreview()">×</button>
+          </div>
+          
+          <div class="preview-body">
+            <div class="image-container" *ngIf="!imagePreviewError">
+              <img 
+                [src]="product.imageUrl" 
+                [alt]="product.name || 'Product preview'"
+                (load)="onImageLoad()"
+                (error)="onImageError()"
+                class="preview-image">
+            </div>
+            
+            <div class="error-message" *ngIf="imagePreviewError">
+              <div class="error-icon">⚠️</div>
+              <p>Unable to load image from the provided URL</p>
+              <small>Please check the URL and try again</small>
+            </div>
+          </div>
+          
+          <div class="preview-footer">
+            <p class="image-url">{{product.imageUrl}}</p>
+            <button type="button" class="btn-secondary" (click)="closePreview()">Close</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Specifications -->
-    <div class="form-section">
-      <h2>Specifications</h2>
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="weight">Weight</label>
-          <input 
-            type="text" 
-            id="weight" 
-            [(ngModel)]="product.specifications.weight" 
-            name="weight"
-            placeholder="e.g., 1.5 kg">
-        </div>
-
-        <div class="form-group">
-          <label for="dimensions">Dimensions</label>
-          <input 
-            type="text" 
-            id="dimensions" 
-            [(ngModel)]="product.specifications.dimensions" 
-            name="dimensions"
-            placeholder="e.g., 30x20x10 cm">
-        </div>
-
-        <div class="form-group">
-          <label for="material">Material</label>
-          <input 
-            type="text" 
-            id="material" 
-            [(ngModel)]="product.specifications.material" 
-            name="material"
-            placeholder="e.g., Cotton, Plastic">
-        </div>
-
-        <div class="form-group">
-          <label for="color">Color</label>
-          <input 
-            type="text" 
-            id="color" 
-            [(ngModel)]="product.specifications.color" 
-            name="color"
-            placeholder="e.g., Blue, Red">
-        </div>
-      </div>
-    </div>
-
-    <!-- Tags -->
-    <div class="form-section">
-      <h2>Tags</h2>
-      <div class="tags-input">
-        <input 
-          type="text" 
-          [(ngModel)]="currentTag" 
-          name="currentTag"
-          placeholder="Add tags to help customers find your product"
-          (keyup.enter)="addTag()">
-        <button type="button" class="add-tag-btn" (click)="addTag()">Add Tag</button>
-      </div>
-      
-      <div class="tags-list" *ngIf="product.tags.length > 0">
-        <span class="tag" *ngFor="let tag of product.tags; let i = index">
-          {{tag}}
-          <button type="button" class="remove-tag" (click)="removeTag(i)">×</button>
-        </span>
       </div>
     </div>
 
