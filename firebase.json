@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/murecom",
+    "public": "dist/murecom/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
