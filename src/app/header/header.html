@@ -2,7 +2,7 @@
   <div class="header-container">
     <!-- Logo -->
     <div class="logo">
-      <h1>MureCom</h1>
+      <h1 (click)="navigateHome()" style="cursor:pointer">MureCom</h1>
     </div>
 
     <!-- Search Bar -->
@@ -11,9 +11,10 @@
         type="text"
         placeholder="Search products..."
         [(ngModel)]="searchQuery"
+        (keydown.enter)="performSearch()"
         class="search-input"
       />
-      <button class="search-button">
+      <button class="search-button" (click)="performSearch()">
         <svg
           width="20"
           height="20"
@@ -69,18 +70,16 @@
             stroke="currentColor"
             stroke-width="2"
           >
-            <path
-              d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
-            ></path>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           <span
-            >{{ isLoggedIn ? (currentUser?.displayName || "Account") : "Account"
+            >{{ isLoggedIn ? (currentUser?.displayName || 'Account') : 'Account'
             }}</span
           >
         </button>
 
-        <!-- Logged Out Menu -->
+        <!-- Logged-out dropdown -->
         <div
           class="dropdown-menu"
           [class.active]="isAccountMenuOpen"
@@ -100,7 +99,7 @@
           </button>
         </div>
 
-        <!-- Logged In Menu -->
+        <!-- Logged-in dropdown -->
         <div
           class="dropdown-menu"
           [class.active]="isAccountMenuOpen"
