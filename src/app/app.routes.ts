@@ -10,6 +10,7 @@ import { CheckoutComponent } from './checkout/checkout';
 import { BecomeSellerComponent } from './become-seller/become-seller';
 import { SellerApprovalComponent } from './seller-approval/seller-approval';
 import { ManageUsersComponent } from './manage-users/manage-users';
+import { OrdersComponent } from './orders/orders';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,5 +25,6 @@ export const routes: Routes = [
   { path: 'become-seller', component: BecomeSellerComponent },
   { path: 'seller-approval', component: SellerApprovalComponent },
   { path: 'manage-users', component: ManageUsersComponent},
+  { path: 'orders', component: OrdersComponent},
   { path: '**', redirectTo: '' }
 ];
