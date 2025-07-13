@@ -49,7 +49,7 @@ export class AdminDashboardComponent {
       title: "Manage Users",
       description: "View and manage user accounts, roles, and permissions",
       icon: "👥",
-      route: "/admin/manage-users",
+      route: "/manage-users",
       color: "orange",
       count: 1834
     },

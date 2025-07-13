@@ -1,0 +1,398 @@
+/* General Page Layout */
+.manage-users-container {
+  min-height: 100vh;
+  background-color: #f8fafc; /* Light gray background */
+  padding: 2rem;
+}
+
+.users-header {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #6b7280; /* Gray text */
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: #2563eb; /* MureCom blue on hover */
+}
+
+.header-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a; /* Dark text */
+  margin-bottom: 0.5rem;
+}
+
+.header-content p {
+  color: #6b7280; /* Gray text */
+  font-size: 1.125rem;
+}
+
+.users-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #2563eb; /* MureCom blue spinner */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.error-container {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.error-message {
+  text-align: center;
+  color: #ef4444; /* Red for errors */
+}
+
+.error-message p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.retry-button {
+  background: #ef4444; /* Red button */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background: #dc2626; /* Darker red on hover */
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6b7280; /* Gray text */
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.refresh-button {
+  background: #2563eb; /* MureCom blue button */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.refresh-button:hover {
+  background: #1d4ed8; /* Darker blue on hover */
+}
+
+/* Users Grid */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Slightly wider cards */
+  gap: 2rem;
+}
+
+/* User Card */
+.user-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb; /* Default light gray border */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1; /* Default z-index for cards */
+}
+
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+}
+
+/* Fix: Active card with open dropdown should be on top */
+.user-card.active-user-card {
+  z-index: 100; /* A very high z-index to ensure it's on top when its dropdown is active */
+}
+
+.user-info-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #e5e7eb; /* Light border around avatar */
+}
+
+.user-details {
+  flex-grow: 1;
+}
+
+.user-display-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+  word-break: break-all;
+}
+
+/* User Type Badge - Consistent with Seller Approval */
+.user-type-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-buyer {
+  background-color: #e0f2fe; /* Light blue */
+  color: #2563eb; /* MureCom blue */
+}
+.badge-seller {
+  background-color: #d1fae5; /* Light green */
+  color: #065f46; /* Darker green */
+}
+.badge-admin {
+  background-color: #fef3c7; /* Light yellow */
+  color: #d97706; /* Darker orange */
+}
+
+.user-meta-details {
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #374151;
+  width: 100px; /* Fixed width for labels for alignment */
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: #4b5563;
+  flex-grow: 1;
+}
+
+.user-id {
+  font-family: monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.user-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Dropdown Menu Styling */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  color: #6b7280; /* Gray icon */
+}
+
+.dropdown-toggle:hover {
+  background-color: #f3f4f6; /* Light gray background on hover */
+  color: #1a1a1a; /* Darker icon on hover */
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  bottom: 100%; /* Changed from top: 100%; to extend upwards */
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 10; /* Relative to its parent stacking context (the user-card) */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px); /* Changed from translateY(10px) to translateY(-10px) */
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  padding: 0.5rem 0;
+}
+
+.dropdown-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f3f4f6; /* Light gray on hover */
+  color: #1a1a1a;
+}
+
+.dropdown-item.danger {
+  color: #ef4444; /* Red for dangerous actions */
+}
+
+.dropdown-item.danger:hover {
+  background-color: #fee2e2; /* Light red on hover */
+  color: #991b1b; /* Darker red on hover */
+}
+
+.dropdown-divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 0.5rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .manage-users-container {
+    padding: 1rem;
+  }
+
+  .users-header {
+    margin-bottom: 2rem;
+  }
+
+  .header-content h1 {
+    font-size: 2rem;
+  }
+
+  .header-content p {
+    font-size: 1rem;
+  }
+
+  .users-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .user-card {
+    padding: 1rem;
+  }
+
+  .user-info-main {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .user-avatar {
+    margin-bottom: 0.75rem;
+  }
+
+  .user-meta-details {
+    margin-bottom: 1rem;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .detail-label {
+    width: auto;
+    margin-bottom: 0.25rem;
+  }
+
+  .user-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-card {
+    padding: 0.75rem;
+  }
+}
