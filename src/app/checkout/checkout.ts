@@ -5,6 +5,16 @@ import { Router } from '@angular/router';
 
 import { CartService, CartItem } from '../services/cart.service';
 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from 'firebase/firestore';
+import { app } from '../firebase';
+import { AuthService } from '../services/auth.service';
+
+/* ---------- form helpers (visual only) ---------- */
 interface ShippingAddress {
   firstName: string;
   lastName: string;
@@ -16,7 +26,6 @@ interface ShippingAddress {
   zipCode: string;
   country: string;
 }
-
 interface PaymentMethod {
   type: 'card' | 'paypal';
   cardNumber: string;
@@ -33,14 +42,18 @@ interface PaymentMethod {
   styleUrls: ['./checkout.css']
 })
 export class CheckoutComponent {
-  /* cart items now come from CartService */
-  constructor(private cart: CartService, private router: Router) {}
+  private firestore = getFirestore(app);
 
+  constructor(
+    private cart: CartService,
+    private auth: AuthService,
+    private router: Router
+  ) {}
+
+  /* ---------- cart helpers ---------- */
   get cartItems(): CartItem[] {
     return this.cart.getCartItems();
   }
-
-  /* ----- simple totals (shipping always free, no tax) ----- */
   get subtotal(): number {
     return this.cartItems.reduce(
       (sum, i) => sum + i.product.price * i.quantity,
@@ -48,13 +61,13 @@ export class CheckoutComponent {
     );
   }
   get shipping(): number {
-    return 0;
+    return 0; // always free for now
   }
   get total(): number {
-    return this.subtotal;
+    return this.subtotal + this.shipping;
   }
 
-  /* ----- checkout form models (unchanged visuals) ----- */
+  /* ---------- dummy form models ---------- */
   shippingAddress: ShippingAddress = {
     firstName: '',
     lastName: '',
@@ -66,7 +79,6 @@ export class CheckoutComponent {
     zipCode: '',
     country: 'United States'
   };
-
   paymentMethod: PaymentMethod = {
     type: 'card',
     cardNumber: '',
@@ -74,7 +86,6 @@ export class CheckoutComponent {
     cvv: '',
     cardholderName: ''
   };
-
   countries = [
     'United States',
     'Canada',
@@ -87,7 +98,7 @@ export class CheckoutComponent {
 
   processing = false;
 
-  /* ----- cart update helpers ----- */
+  /* ---------- cart actions ---------- */
   updateQuantity(id: string | number, q: number) {
     this.cart.updateQuantity(id, q);
   }
@@ -95,17 +106,38 @@ export class CheckoutComponent {
     this.cart.removeFromCart(id);
   }
 
-  /* ----- fake checkout flow (demo only) ----- */
-  async processCheckout() {
-    if (!this.cartItems.length) return;
+  /* ---------- order processing ---------- */
+  async processCheckout(): Promise<void> {
+    if (!this.cartItems.length || this.processing) return;
 
     this.processing = true;
-    await new Promise((r) => setTimeout(r, 1500));
-    alert('Order placed successfully! (Demo)');
-    this.processing = false;
-    this.router.navigate(['/']);
+
+    try {
+      await addDoc(collection(this.firestore, 'orders'), {
+        userId: this.auth.currentUser?.uid ?? null,
+        items: JSON.parse(JSON.stringify(this.cartItems)), // clone
+        subtotal: this.subtotal,
+        shipping: this.shipping,
+        total: this.total,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
+
+      /* clear cart */
+      this.cart.clearCart();
+
+      alert('✅ Your order has been placed!');
+
+      this.router.navigate(['/']);
+    } catch (err) {
+      console.error('Order error:', err);
+      alert('❌ Failed to place order. Please try again.');
+    } finally {
+      this.processing = false;
+    }
   }
 
+  /* ---------- nav ---------- */
   goBack() {
     this.router.navigate(['/']);
   }

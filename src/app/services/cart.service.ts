@@ -22,7 +22,6 @@ export interface Product {
   rating: number;
   reviews: number;
   badge?: string;
-  /* no originalPrice here any more → avoid undefined */
 }
 
 export interface CartItem {
@@ -38,7 +37,7 @@ export class CartService {
   private localKey = 'murecom_cart';
 
   constructor(private authService: AuthService) {
-    /* Reload cart whenever auth state flips */
+    /* reload cart whenever auth state changes */
     this.authService.currentUser$.subscribe(async (u) => {
       await this.loadCart(u?.uid || null);
     });
@@ -81,6 +80,12 @@ export class CartService {
     this.persistCart();
   }
 
+  /** Clear the cart entirely (used after successful order) */
+  clearCart(): void {
+    this._items$.next([]);
+    this.persistCart();
+  }
+
   /* ---------- persistence ---------- */
   private async loadCart(uid: string | null): Promise<void> {
     try {
@@ -110,9 +115,7 @@ export class CartService {
   private async persistCart(): Promise<void> {
     const uid = this.authService.currentUser?.uid || null;
     const items = this._items$.value;
-
-    /* Strip undefined to satisfy Firestore */
-    const clean = JSON.parse(JSON.stringify(items));
+    const clean = JSON.parse(JSON.stringify(items)); // strip undefined
 
     try {
       if (uid) {
