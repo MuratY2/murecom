@@ -14,9 +14,8 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./header.css']
 })
 export class HeaderComponent {
-  /* search bar text */
+  /* ────────── state ────────── */
   searchQuery = '';
-
   isCartOpen = false;
   isAccountMenuOpen = false;
 
@@ -26,7 +25,7 @@ export class HeaderComponent {
     private router: Router
   ) {}
 
-  /* ---------- navigation helpers ---------- */
+  /* ────────── navigation helpers ────────── */
   navigateHome() {
     this.closeDropdowns();
     this.router.navigate(['/']);
@@ -44,7 +43,13 @@ export class HeaderComponent {
     this.router.navigate(['/checkout']);
   }
 
-  /* ---------- cart getters & actions ---------- */
+  /** NEW — Order-history route */
+  navigateToOrders() {
+    this.closeDropdowns();
+    this.router.navigate(['/orders']);
+  }
+
+  /* ────────── cart getters / actions ────────── */
   get cartItemCount(): number {
     return this.cartService.getCartItemCount();
   }
@@ -54,14 +59,14 @@ export class HeaderComponent {
   get cartItems() {
     return this.cartService.getCartItems();
   }
-  updateQuantity(id: number | string, qty: number) {
+  updateQuantity(id: string | number, qty: number) {
     this.cartService.updateQuantity(id, qty);
   }
-  removeFromCart(id: number | string) {
+  removeFromCart(id: string | number) {
     this.cartService.removeFromCart(id);
   }
 
-  /* ---------- auth helpers ---------- */
+  /* ────────── auth helpers ────────── */
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
   }
@@ -72,15 +77,15 @@ export class HeaderComponent {
     return this.authService.userData;
   }
 
-  /* user-type button text + action */
+  /* button in the middle of header */
   get userTypeButton(): { text: string; action: string } {
     const t = this.userData?.userType || 'buyer';
-    if (t === 'seller') return { text: 'Upload Product', action: 'upload-product' };
-    if (t === 'admin')  return { text: 'Admin Dashboard', action: 'admin-dashboard' };
-    return { text: 'Become a Seller', action: 'become-seller' };
+    if (t === 'seller')  return { text: 'Upload Product', action: 'upload-product' };
+    if (t === 'admin')   return { text: 'Admin Dashboard', action: 'admin-dashboard' };
+    return                { text: 'Become a Seller',  action: 'become-seller' };
   }
 
-  /* ---------- dropdown toggles ---------- */
+  /* ────────── dropdown toggles ────────── */
   toggleCart() {
     this.isCartOpen = !this.isCartOpen;
     this.isAccountMenuOpen = false;
@@ -94,40 +99,15 @@ export class HeaderComponent {
     this.isAccountMenuOpen = false;
   }
 
-  /* ---------- account nav ---------- */
-  navigateToLogin() {
-    this.closeDropdowns();
-    this.router.navigate(['/login']);
-  }
-  navigateToSignup() {
-    this.closeDropdowns();
-    this.router.navigate(['/signup']);
-  }
-  navigateToProfile() {
-    this.closeDropdowns();
-    this.router.navigate(['/profile']);
-  }
+  /* ────────── account-menu nav ────────── */
+  navigateToLogin()  { this.closeDropdowns(); this.router.navigate(['/login']); }
+  navigateToSignup() { this.closeDropdowns(); this.router.navigate(['/signup']); }
+  navigateToProfile(){ this.closeDropdowns(); this.router.navigate(['/profile']); }
 
-  /* ---------- user-type button handler ---------- */
   handleUserTypeAction() {
-    const action = this.userTypeButton.action;
-
-    switch (action) {
-      case 'become-seller':
-        this.router.navigate(['/become-seller']);
-        break;
-      case 'upload-product':
-        this.router.navigate(['/upload-product']);
-        break;
-      case 'admin-dashboard':
-        this.router.navigate(['/admin-dashboard']);
-        break;
-      default:
-        this.router.navigate(['/']);
-    }
+    this.router.navigate(['/', this.userTypeButton.action]);
   }
 
-  /* ---------- sign-out ---------- */
   async signOut() {
     try {
       await this.authService.signOut();
