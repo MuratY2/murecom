@@ -1,0 +1,105 @@
+<div class="manage-products-container" (click)="closeDropdowns()">
+  <div class="products-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span> Back to Admin Dashboard
+    </button>
+    <div class="header-content">
+      <h1>Manage Products</h1>
+      <p>View and manage all approved products on your platform</p>
+    </div>
+  </div>
+
+  <div class="products-content">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading products...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-container" *ngIf="error && !loading">
+      <div class="error-message">
+        <p>{{ error }}</p>
+        <button class="retry-button" (click)="loadProducts()">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" *ngIf="!loading && !error && products.length > 0">
+      <div class="product-card" *ngFor="let item of products" [class.active-product-card]="activeDropdown === item.product.id">
+        <div class="product-header">
+          <div class="product-image-container">
+            <img 
+              [src]="item.product.imageUrl" 
+              [alt]="item.product.name" 
+              class="product-image"
+            >
+            <div class="stock-badge" [class.low-stock]="item.product.stock <= 5">
+              {{ item.product.stock }} in stock
+            </div>
+          </div>
+          <div class="product-actions">
+            <div class="dropdown-container">
+              <button class="dropdown-toggle" (click)="toggleDropdown(item.product.id, $event)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-more-vertical">
+                  <circle cx="12" cy="12" r="1"/>
+                  <circle cx="12" cy="5" r="1"/>
+                  <circle cx="12" cy="19" r="1"/>
+                </svg>
+              </button>
+              <div class="dropdown-menu" [class.active]="activeDropdown === item.product.id">
+                <button class="dropdown-item" (click)="viewProductDetails(item)">View Details</button>
+                <button class="dropdown-item" (click)="editProduct(item)">Edit Product</button>
+                <button class="dropdown-item" (click)="viewSellerDetails(item.seller)">View Seller</button>
+                <hr class="dropdown-divider">
+                <button class="dropdown-item danger" (click)="removeProduct(item)">Remove Product</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <h3 class="product-name">{{ item.product.name }}</h3>
+          <p class="product-brand">{{ item.product.brand }}</p>
+          <p class="product-category">{{ item.product.category }}</p>
+          <p class="product-description">{{ item.product.description }}</p>
+          
+          <div class="product-pricing">
+            <span class="product-price">${{ item.product.price.toFixed(2) }}</span>
+          </div>
+        </div>
+
+        <div class="seller-info">
+          <img 
+            [src]="item.seller.photoURL || '/placeholder.svg?height=48&width=48'" 
+            [alt]="item.seller.displayName" 
+            class="seller-avatar"
+          >
+          <div class="seller-details">
+            <h4 class="seller-name">{{ item.seller.displayName }}</h4>
+            <p class="seller-email">{{ item.seller.email }}</p>
+          </div>
+        </div>
+
+        <div class="product-meta">
+          <div class="meta-item">
+            <span class="meta-label">Created:</span>
+            <span class="meta-value">{{ item.product.createdAt | date:'mediumDate' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Updated:</span>
+            <span class="meta-value">{{ item.product.updatedAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && !error && products.length === 0">
+      <div class="empty-icon">📦</div>
+      <h3>No products found</h3>
+      <p>Approved products will appear here as they are added to the platform.</p>
+      <button class="refresh-button" (click)="loadProducts()">Refresh List</button>
+    </div>
+  </div>
+</div>

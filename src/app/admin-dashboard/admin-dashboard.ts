@@ -33,7 +33,7 @@ export class AdminDashboardComponent {
       title: "Manage Products",
       description: "View, edit, and manage all products in the marketplace",
       icon: "🛍️",
-      route: "/admin/manage-products",
+      route: "/manage-products",
       color: "green",
       count: 247
     },
