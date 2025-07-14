@@ -50,11 +50,11 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  /* ---------- init ---------- */
+  /** Pull only approved products from Firestore */
   async ngOnInit(): Promise<void> {
-    /* load products from Firestore */
     const raw: FirestoreProduct[] = await this.productsSrv.getAllProducts();
-    this.products = raw.map(p => ({
+    const approved = raw.filter(p => p.status === 'approved');
+    this.products = approved.map(p => ({
       id: p.id!,
       name: p.name,
       price: p.price,
@@ -64,9 +64,8 @@ export class HomeComponent implements OnInit {
       reviews: 324
     })) as CartProduct[];
 
-    /* read ?q= from URL */
-    this.route.queryParamMap.subscribe(p => {
-      this.searchQuery = p.get('q') || '';
+    this.route.queryParamMap.subscribe(params => {
+      this.searchQuery = params.get('q') || '';
     });
   }
 
@@ -78,7 +77,8 @@ export class HomeComponent implements OnInit {
         p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
 
       const matchesCategory =
-        this.selectedCategory === 'all' || p.category === this.selectedCategory;
+        this.selectedCategory === 'all' ||
+        p.category === this.selectedCategory;
 
       const matchesPrice = this.matchesPriceRange(p.price);
 
@@ -102,7 +102,10 @@ export class HomeComponent implements OnInit {
   addToCart(p: CartProduct) {
     this.cart.addToCart(p);
   }
+
   generateStars(r: number): string[] {
-    return Array.from({ length: 5 }, (_, i) => (i < Math.floor(r) ? '★' : '☆'));
+    return Array.from({ length: 5 }, (_, i) =>
+      i < Math.floor(r) ? '★' : '☆'
+    );
   }
 }
