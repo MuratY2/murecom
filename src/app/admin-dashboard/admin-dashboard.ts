@@ -57,7 +57,7 @@ export class AdminDashboardComponent {
       title: "Order Management",
       description: "Monitor and manage customer orders and transactions",
       icon: "📋",
-      route: "/admin/manage-orders",
+      route: "/order-management",
       color: "teal",
       count: 156
     },
